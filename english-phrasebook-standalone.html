@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>开口手册 · 旅行与社交英语</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Space+Mono:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#16324F; --navy-deep:#0F2338; --gold:#E8DCB8; --gold-dim:#C7BE9E;
+    --red:#B3382C; --paper:#F7F5EC; --paper-card:#FBF8F0; --line:#D8CFB8;
+    --line2:#E4DCC5; --ink:#1E2B38; --muted:#5C6B7A; --tan:#7A7157; --tan2:#9A8F6E;
+    --green:#3F6B4A; --greenbg:#F3F7EF;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--navy);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+  .wrap{max-width:640px;margin:0 auto;background:var(--navy);min-height:100vh;}
+  header{padding:40px 24px 32px;color:var(--gold);position:relative;overflow:hidden;}
+  header::before{content:"";position:absolute;inset:0;opacity:.06;pointer-events:none;
+    background-image:repeating-linear-gradient(135deg,transparent,transparent 18px,var(--gold) 18px,var(--gold) 19px);}
+  .eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--red);}
+  h1{font-family:'Fraunces',serif;font-weight:600;font-size:32px;margin:8px 0 4px;line-height:1.1;}
+  .sub{font-size:14px;color:var(--gold-dim);margin:0;}
+  .progress-row{display:flex;align-items:center;gap:16px;margin-top:24px;}
+  .progress-track{flex:1;height:6px;border-radius:999px;background:var(--navy-deep);overflow:hidden;}
+  .progress-fill{height:100%;background:var(--red);transition:width .6s;}
+  .progress-label{font-family:'Space Mono',monospace;font-size:12px;color:var(--gold);white-space:nowrap;}
+
+  main{background:var(--paper);border-radius:20px 20px 0 0;min-height:70vh;padding:24px 20px 64px;}
+  .section-label{display:flex;align-items:baseline;gap:8px;margin:8px 0 12px;}
+  .section-label .code{font-family:'Space Mono',monospace;font-size:11px;color:var(--red);}
+  .section-label h2{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--navy);margin:0;}
+  .section-label .en{font-size:11px;color:var(--tan2);text-transform:uppercase;letter-spacing:.03em;}
+
+  .cat-list{display:flex;flex-direction:column;gap:12px;margin-bottom:32px;}
+  .cat-card{border:1px solid var(--line);background:var(--paper-card);border-radius:2px;overflow:hidden;cursor:pointer;text-align:left;width:100%;
+    background-image:repeating-linear-gradient(90deg,transparent,transparent 7px,rgba(92,107,122,.14) 7px,rgba(92,107,122,.14) 8px);
+    background-size:8px 100%;background-repeat:no-repeat;background-position:left top;transition:background-color .2s;}
+  .cat-card:hover{background-color:#F5EFDC;}
+  .cat-inner{padding:16px 16px 16px 20px;display:flex;align-items:center;gap:14px;}
+  .icon-circle{width:44px;height:44px;border-radius:999px;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:19px;}
+  .cat-text{flex:1;min-width:0;}
+  .cat-code{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--muted);text-transform:uppercase;}
+  .cat-title-en{font-weight:600;color:var(--navy);font-size:15px;line-height:1.2;}
+  .cat-title-cn{font-size:13px;color:var(--muted);}
+  .chevron{color:var(--muted);font-size:16px;}
+  .cat-bar{height:3px;background:var(--line2);width:100%;}
+  .cat-bar-fill{height:100%;background:var(--red);transition:width .5s;}
+
+  .stamp{border-radius:999px;border:2px solid;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;}
+  .stamp.sm{width:36px;height:36px;font-size:15px;}
+  .stamp.md{width:56px;height:56px;font-size:22px;}
+  .stamp.filled{border-color:var(--red);color:var(--red);transform:rotate(-8deg);opacity:1;}
+  .stamp.empty{border-color:rgba(92,107,122,.3);color:rgba(92,107,122,.3);opacity:.7;}
+
+  .back-btn{background:none;border:none;color:var(--muted);font-size:13px;margin-bottom:16px;cursor:pointer;padding:0;}
+  .detail-header{display:flex;align-items:center;gap:12px;margin-bottom:4px;}
+  .detail-title-en{font-weight:600;color:var(--navy);font-size:17px;line-height:1.2;}
+  .detail-title-cn{font-size:13px;color:var(--tan);}
+
+  .mode-toggle{display:flex;gap:8px;margin:20px 0 16px;}
+  .mode-btn{padding:7px 14px;border-radius:999px;font-size:12px;font-weight:500;border:none;cursor:pointer;background:var(--line2);color:var(--muted);}
+  .mode-btn.active{background:var(--navy);color:var(--paper);}
+
+  .phrase-box{border:1px solid var(--line);background:var(--paper-card);border-radius:2px;overflow:hidden;}
+  .phrase-row{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line2);}
+  .phrase-row:last-child{border-bottom:none;}
+  .phrase-row.mastered{background:var(--greenbg);}
+  .check-btn{margin-top:2px;width:24px;height:24px;border-radius:999px;border:2px solid var(--line);background:none;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:transparent;font-size:13px;font-weight:bold;}
+  .check-btn.on{background:var(--green);border-color:var(--green);color:var(--paper-card);}
+  .phrase-text{flex:1;min-width:0;}
+  .phrase-en{font-size:15px;color:var(--ink);line-height:1.4;}
+  .phrase-cn{font-size:13px;color:var(--tan);margin-top:2px;}
+  .speak-btn{margin-top:2px;width:32px;height:32px;border-radius:999px;border:none;background:none;color:var(--navy);cursor:pointer;flex-shrink:0;font-size:15px;}
+  .speak-btn:hover{background:rgba(22,50,79,.1);}
+
+  .drill-wrap{display:flex;flex-direction:column;align-items:center;padding:36px 16px;}
+  .drill-eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+  .drill-card{width:100%;max-width:380px;border:1px solid var(--line);background:var(--paper-card);border-radius:2px;padding:36px 24px;text-align:center;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .drill-prompt{font-size:13px;color:var(--tan);margin-bottom:10px;}
+  .drill-en{font-size:19px;font-weight:600;color:var(--navy);line-height:1.4;margin-bottom:14px;}
+  .reveal-btn{background:none;border:none;color:var(--red);font-size:13px;text-decoration:underline;cursor:pointer;}
+  .drill-cn{font-size:16px;color:var(--ink);border-top:1px solid var(--line2);padding-top:14px;width:100%;}
+  .drill-controls{display:flex;align-items:center;gap:12px;margin-top:20px;}
+  .circle-btn{width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--navy);cursor:pointer;font-size:15px;}
+  .next-btn{padding:10px 24px;border-radius:2px;background:var(--navy);color:var(--paper);border:none;font-size:14px;font-weight:500;cursor:pointer;}
+  .exit-drill{background:none;border:none;color:var(--tan);font-size:12px;text-decoration:underline;margin-top:20px;cursor:pointer;}
+
+  .empty-hint{text-align:center;font-size:12px;color:var(--tan2);margin-top:28px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Phrasebook · No. GC-2026</div>
+    <h1>开口手册</h1>
+    <p class="sub">旅行与社交英语表达 · 练到张口就来</p>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="overallFill" style="width:0%"></div></div>
+      <div class="progress-label" id="overallLabel">0/0 已盖章</div>
+    </div>
+  </header>
+  <main id="main"></main>
+</div>
+
+<script>
+const CATEGORIES = [
+  { id:"checkin", group:"travel", code:"AP-01", titleEn:"Airport & Check-in", titleCn:"机场值机", icon:"✈", phrases:[
+    {en:"Where is the check-in counter for this airline?", cn:"值机柜台在哪里"},
+    {en:"I'd like a window seat, please.", cn:"我要一个靠窗的座位"},
+    {en:"How many bags can I check in?", cn:"可以托运几件行李"},
+    {en:"I'm worried I'll miss my connecting flight.", cn:"我担心赶不上转机"},
+    {en:"Could you help me find gate twelve?", cn:"能帮我找一下12号登机口吗"},
+  ]},
+  { id:"directions", group:"travel", code:"AP-02", titleEn:"Asking Directions", titleCn:"问路", icon:"📍", phrases:[
+    {en:"Excuse me, how do I get to the old town?", cn:"请问怎么去老城区"},
+    {en:"Is it within walking distance?", cn:"走路能到吗"},
+    {en:"Go straight, then turn left at the corner.", cn:"直走，然后在拐角左转"},
+    {en:"Am I heading the right way for the station?", cn:"我这样走去车站对吗"},
+    {en:"Could you point me in the right direction?", cn:"能给我指一下方向吗"},
+  ]},
+  { id:"ordering", group:"travel", code:"AP-03", titleEn:"Ordering Food", titleCn:"点餐", icon:"🍴", phrases:[
+    {en:"Could I get the menu, please?", cn:"能给我看下菜单吗"},
+    {en:"I'll have this one, thanks.", cn:"我要这个，谢谢"},
+    {en:"Not too spicy, please.", cn:"请不要太辣"},
+    {en:"Could you make it to go?", cn:"可以打包吗"},
+    {en:"Check, please.", cn:"买单"},
+  ]},
+  { id:"hotel", group:"travel", code:"AP-04", titleEn:"Hotel Check-in", titleCn:"办理入住", icon:"🛏", phrases:[
+    {en:"I have a reservation under this name.", cn:"我用这个名字订了房"},
+    {en:"What time is checkout?", cn:"几点退房"},
+    {en:"Is breakfast included?", cn:"含早餐吗"},
+    {en:"Could I get a late checkout?", cn:"能延迟退房吗"},
+    {en:"The Wi-Fi isn't working in my room.", cn:"房间的wifi连不上"},
+  ]},
+  { id:"trouble", group:"travel", code:"AP-05", titleEn:"Unexpected Situations", titleCn:"突发状况", icon:"⚠", phrases:[
+    {en:"I think I lost my wallet.", cn:"我的钱包好像丢了"},
+    {en:"Could you call the police for me?", cn:"能帮我报警吗"},
+    {en:"I don't feel well, is there a pharmacy nearby?", cn:"我不太舒服，附近有药店吗"},
+    {en:"I missed my train, what should I do?", cn:"我错过火车了，该怎么办"},
+    {en:"Sorry, could you say that a little slower?", cn:"抱歉，能说慢一点吗"},
+  ]},
+  { id:"likes", group:"social", code:"SC-01", titleEn:"Likes & Dislikes", titleCn:"表达喜欢/不喜欢", icon:"♥", phrases:[
+    {en:"I really like this, it's so different from back home.", cn:"我真挺喜欢，跟我家乡很不一样"},
+    {en:"I'm not really into it, to be honest.", cn:"说实话我不太喜欢"},
+    {en:"This is exactly my kind of thing.", cn:"这正合我的口味"},
+    {en:"It's not bad, just not really for me.", cn:"也不差，只是不太适合我"},
+  ]},
+  { id:"surprise", group:"social", code:"SC-02", titleEn:"Surprise & Curiosity", titleCn:"表达惊讶/好奇", icon:"✦", phrases:[
+    {en:"Wait, really? How does that work?", cn:"真的吗？这是怎么回事"},
+    {en:"I've never seen anything like this before.", cn:"我从没见过这样的"},
+    {en:"That's fascinating, tell me more.", cn:"太有意思了，多说点"},
+    {en:"No way, seriously?", cn:"不会吧，真的假的"},
+  ]},
+  { id:"disagree", group:"social", code:"SC-03", titleEn:"Polite Disagreement", titleCn:"委婉表达不同意见", icon:"?", phrases:[
+    {en:"I see what you mean, but I think...", cn:"我懂你的意思，不过我觉得…"},
+    {en:"That's fair, though for me it's more like...", cn:"有道理，不过对我来说更像…"},
+    {en:"I'm not so sure about that.", cn:"我不太确定诶"},
+    {en:"Maybe, but have you considered...?", cn:"也许吧，不过你有没有想过…"},
+  ]},
+  { id:"story", group:"social", code:"SC-04", titleEn:"Sharing & Storytelling", titleCn:"讲故事/分享经历", icon:"📖", phrases:[
+    {en:"That reminds me of something back home.", cn:"这让我想起家乡的事"},
+    {en:"In China, we usually do it a bit differently.", cn:"在中国我们通常不太一样"},
+    {en:"Let me tell you what happened to me once.", cn:"我给你讲件我自己的事"},
+    {en:"You wouldn't believe what happened next.", cn:"你肯定想不到接下来发生了什么"},
+  ]},
+];
+
+const TOTAL_PHRASES = CATEGORIES.reduce((n,c)=>n+c.phrases.length,0);
+const STORAGE_KEY = "mastered-phrases-v1";
+let mastered = {};
+let openCat = null;
+let mode = "list";
+let drillOrder = [];
+let drillPos = 0;
+let drillRevealed = false;
+
+function phraseKey(catId, idx){ return catId + ":" + idx; }
+
+let englishVoices = [];
+
+// Rank voices so higher-quality ones (network/neural/enhanced voices,
+// as opposed to the default compact/robotic ones) sort first, and
+// silently use the best one available — no picker shown to the user.
+function voiceQualityScore(v){
+  const n = v.name.toLowerCase();
+  let score = 0;
+  if(/premium|enhanced|neural|natural|siri/.test(n)) score += 3;
+  if(/google/.test(n)) score += 2;
+  if(v.localService === false) score += 1;
+  if(/compact/.test(n)) score -= 2;
+  if(v.lang === "en-US") score += 1;
+  return score;
+}
+
+function populateVoiceList(){
+  const all = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  englishVoices = all
+    .filter(v => v.lang && v.lang.toLowerCase().startsWith("en"))
+    .sort((a,b) => voiceQualityScore(b) - voiceQualityScore(a));
+}
+
+function speak(text){
+  if(!("speechSynthesis" in window)){
+    alert("这个浏览器不支持朗读功能，换个浏览器试试（推荐 Chrome / Safari 最新版）");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US";
+  u.rate = 0.92;
+  if(englishVoices.length) u.voice = englishVoices[0];
+  window.speechSynthesis.speak(u);
+}
+
+function speakPhrase(catId, idx){
+  const cat = CATEGORIES.find(c=>c.id===catId);
+  if(cat) speak(cat.phrases[idx].en);
+}
+
+// Voice lists load asynchronously on many browsers, so wire up both
+// the immediate call and the change event.
+if("speechSynthesis" in window){
+  populateVoiceList();
+  window.speechSynthesis.onvoiceschanged = populateVoiceList;
+}
+
+async function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) mastered = JSON.parse(raw);
+  }catch(e){ /* nothing saved yet */ }
+  render();
+}
+
+async function saveProgress(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(mastered)); }
+  catch(e){ console.error("save failed", e); }
+}
+
+function toggle(catId, idx){
+  const key = phraseKey(catId, idx);
+  if(mastered[key]) delete mastered[key]; else mastered[key] = true;
+  saveProgress();
+  render();
+}
+
+function masteredCountFor(cat){
+  return cat.phrases.filter((_,i)=>mastered[phraseKey(cat.id,i)]).length;
+}
+
+function updateOverall(){
+  const total = Object.keys(mastered).length;
+  const pct = Math.round((total/TOTAL_PHRASES)*100);
+  document.getElementById("overallFill").style.width = pct+"%";
+  document.getElementById("overallLabel").textContent = total+"/"+TOTAL_PHRASES+" 已盖章";
+}
+
+function catCardHtml(cat){
+  const count = masteredCountFor(cat);
+  const pct = Math.round((count/cat.phrases.length)*100);
+  const complete = count === cat.phrases.length;
+  return `
+  <button class="cat-card" onclick="openCategory('${cat.id}')">
+    <div class="cat-inner">
+      <div class="icon-circle">${cat.icon}</div>
+      <div class="cat-text">
+        <div class="cat-code">${cat.code}</div>
+        <div class="cat-title-en">${cat.titleEn}</div>
+        <div class="cat-title-cn">${cat.titleCn}</div>
+      </div>
+      <div class="stamp sm ${complete?'filled':'empty'}">◈</div>
+      <div class="chevron">›</div>
+    </div>
+    <div class="cat-bar"><div class="cat-bar-fill" style="width:${pct}%"></div></div>
+  </button>`;
+}
+
+function openCategory(id){
+  openCat = id; mode = "list"; render();
+}
+
+function backToList(){ openCat = null; render(); }
+
+function setMode(m){
+  mode = m;
+  if(m === "drill"){
+    const cat = CATEGORIES.find(c=>c.id===openCat);
+    drillOrder = [...cat.phrases.keys()].sort(()=>Math.random()-0.5);
+    drillPos = 0; drillRevealed = false;
+  }
+  render();
+}
+
+function drillNext(){
+  drillRevealed = false;
+  drillPos = (drillPos+1) % drillOrder.length;
+  render();
+}
+
+function drillReveal(){ drillRevealed = true; render(); }
+
+function renderHome(){
+  const travel = CATEGORIES.filter(c=>c.group==="travel");
+  const social = CATEGORIES.filter(c=>c.group==="social");
+  const totalMastered = Object.keys(mastered).length;
+  let html = `
+    <div class="section-label"><span class="code">01</span><h2>旅行场景</h2><span class="en">Travel</span></div>
+    <div class="cat-list">${travel.map(catCardHtml).join("")}</div>
+    <div class="section-label"><span class="code">02</span><h2>社交表达</h2><span class="en">Social</span></div>
+    <div class="cat-list">${social.map(catCardHtml).join("")}</div>
+  `;
+  if(totalMastered === 0){
+    html += `<p class="empty-hint">点开一个场景，跟读、打勾，集满你的第一个印章</p>`;
+  }
+  return html;
+}
+
+function renderDetail(){
+  const cat = CATEGORIES.find(c=>c.id===openCat);
+  const count = masteredCountFor(cat);
+  const complete = count === cat.phrases.length;
+  let body = "";
+  if(mode === "list"){
+    body = `<div class="phrase-box">` + cat.phrases.map((p,i)=>{
+      const isM = !!mastered[phraseKey(cat.id,i)];
+      return `
+      <div class="phrase-row ${isM?'mastered':''}">
+        <button class="check-btn ${isM?'on':''}" onclick="toggle('${cat.id}',${i})">${isM?'✓':''}</button>
+        <div class="phrase-text">
+          <div class="phrase-en">${p.en}</div>
+          <div class="phrase-cn">${p.cn}</div>
+        </div>
+        <button class="speak-btn" onclick="speakPhrase('${cat.id}',${i})">🔊</button>
+      </div>`;
+    }).join("") + `</div>`;
+  } else {
+    const idx = drillOrder[drillPos];
+    const p = cat.phrases[idx];
+    body = `
+    <div class="drill-wrap">
+      <div class="drill-eyebrow">速记模式 · ${drillPos+1} / ${drillOrder.length}</div>
+      <div class="drill-card">
+        <div class="drill-prompt">这句话什么意思？</div>
+        <div class="drill-en">${p.en}</div>
+        ${drillRevealed
+          ? `<div class="drill-cn">${p.cn}</div>`
+          : `<button class="reveal-btn" onclick="drillReveal()">显示中文</button>`}
+      </div>
+      <div class="drill-controls">
+        <button class="circle-btn" onclick="speakPhrase('${cat.id}',${idx})">🔊</button>
+        <button class="next-btn" onclick="drillNext()">下一句</button>
+      </div>
+      <button class="exit-drill" onclick="setMode('list')">退出速记，返回词条列表</button>
+    </div>`;
+  }
+
+  return `
+    <button class="back-btn" onclick="backToList()">← 返回全部场景</button>
+    <div class="detail-header">
+      <div class="icon-circle">${cat.icon}</div>
+      <div>
+        <div class="detail-title-en">${cat.titleEn}</div>
+        <div class="detail-title-cn">${cat.titleCn}</div>
+      </div>
+      <div class="stamp md ${complete?'filled':'empty'}">◈</div>
+    </div>
+    <div class="mode-toggle">
+      <button class="mode-btn ${mode==='list'?'active':''}" onclick="setMode('list')">词条列表</button>
+      <button class="mode-btn ${mode==='drill'?'active':''}" onclick="setMode('drill')">速记模式</button>
+    </div>
+    ${body}
+  `;
+}
+
+function render(){
+  const main = document.getElementById("main");
+  main.innerHTML = openCat ? renderDetail() : renderHome();
+  updateOverall();
+}
+
+loadProgress();
+</script>
+</body>
+</html>
