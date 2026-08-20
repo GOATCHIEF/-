@@ -361,6 +361,40 @@ async function translateToZh(text){
   }
 }
 
+// When the dictionary entry has no usage examples (common for many
+// words in this free source), fall back to simple template sentences
+// built from the word's part of speech, so every word still gets
+// something to practice with.
+function fallbackExamples(word, pos){
+  const templates = {
+    "n.": [
+      `Have you ever heard of "${word}" before?`,
+      `Could you explain what a ${word} is?`,
+      `That reminds me of a ${word} I saw recently.`,
+    ],
+    "v.": [
+      `I need to ${word} this before tomorrow.`,
+      `Could you ${word} that for me, please?`,
+      `We usually ${word} together on weekends.`,
+    ],
+    "adj.": [
+      `This place feels really ${word} to me.`,
+      `I didn't expect it to be this ${word}.`,
+      `Everyone said the food was ${word}.`,
+    ],
+    "adv.": [
+      `She spoke ${word} during the meeting.`,
+      `He handled the situation ${word}.`,
+      `They finished the task ${word} enough.`,
+    ],
+  };
+  return templates[pos] || [
+    `Can you use "${word}" in a sentence?`,
+    `I just learned the word "${word}" today.`,
+    `What does "${word}" mean exactly?`,
+  ];
+}
+
 // Free, keyless dictionary lookup — works from any deployed page,
 // no server or API key required. Falls back gracefully if the word
 // isn't found (e.g. slang, brand names, multi-word phrases).
@@ -387,8 +421,9 @@ async function fetchWordDetails(word){
   }
 
   const meaningCn = await translateToZh(meaningEn || w);
+  const sourceExamplesEn = examplesEn.length ? examplesEn.slice(0, 5) : fallbackExamples(w, pos || "n.");
   const examples = [];
-  for(const ex of examplesEn.slice(0, 5)){
+  for(const ex of sourceExamplesEn){
     const cn = await translateToZh(ex);
     examples.push({ en: ex, cn });
   }
