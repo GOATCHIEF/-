@@ -130,6 +130,15 @@
   .word-examples li{margin-bottom:4px;}
   .word-empty{text-align:center;padding:24px 10px;color:var(--muted);font-size:11px;border:1px dashed var(--line);border-radius:8px;}
   .section-mini{font-size:10px;letter-spacing:.12em;color:var(--rose);text-transform:uppercase;margin:20px 2px 9px;}
+
+  .import-box{border:1px dashed var(--line);border-radius:9px;padding:14px;margin-bottom:16px;background:var(--rose-pale);}
+  .import-box textarea{width:100%;min-height:90px;padding:10px;border:1px solid var(--line);border-radius:7px;font-family:monospace;font-size:11px;color:var(--ink);resize:vertical;outline:none;}
+  .import-box textarea:focus{border-color:var(--rose);}
+  .import-btn{margin-top:8px;padding:9px 16px;border:0;border-radius:999px;background:var(--burgundy);color:#fff;font-size:12px;cursor:pointer;}
+  .import-msg{font-size:11px;margin-top:8px;}
+  .import-msg.ok{color:var(--green);}
+  .import-msg.err{color:#B3382C;}
+  .import-toggle{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:11px;color:var(--muted);cursor:pointer;margin-bottom:12px;}
 </style>
 </head>
 <body>
@@ -393,6 +402,46 @@ async function completeWord(id){
   render();
 }
 
+let showImport = false;
+
+function toggleImport(){
+  showImport = !showImport;
+  render();
+}
+
+function importWords(){
+  const box = document.getElementById("importArea");
+  const msgBox = document.getElementById("importMsg");
+  if(!box) return;
+  let list;
+  try{
+    list = JSON.parse(box.value.trim());
+    if(!Array.isArray(list)) throw new Error("not array");
+  }catch(e){
+    if(msgBox){ msgBox.textContent = "格式不对，确认粘贴的是完整的JSON数组"; msgBox.className = "import-msg err"; }
+    return;
+  }
+  let count = 0;
+  list.forEach(item=>{
+    if(!item || !item.word) return;
+    const id = String(item.word).toLowerCase();
+    myWords[id] = {
+      word: item.word,
+      category: item.category || "待确认",
+      phonetic: item.phonetic || "未知",
+      pos: item.pos || "未知",
+      meaning: item.meaning || "未知",
+      examples: Array.isArray(item.examples) ? item.examples : [],
+      loading: false,
+    };
+    count++;
+  });
+  saveWords();
+  box.value = "";
+  if(msgBox){ msgBox.textContent = `已导入 ${count} 个词条`; msgBox.className = "import-msg ok"; }
+  render();
+}
+
 function phraseKey(catId, idx){ return catId + ":" + idx; }
 
 let englishVoices = [];
@@ -544,12 +593,20 @@ function renderCheckin(){
 function renderWords(){
   const entries=Object.entries(myWords);
   return `<div class="page-title">我的单词</div>
-    <p class="page-sub">输入一个新单词，会自动生成音标、词性、释义和五个真实场景例句。</p>
+    <p class="page-sub">输入一个新单词，会尝试自动生成音标、词性、释义和例句（此功能仅在 Claude 对话内有效）。部署到独立网址后，请用下方"导入词条"批量粘贴我生成好的内容。</p>
     <div class="word-form"><div class="field-label">NEW WORD / 新单词</div>
       <input id="newWord" class="word-input" placeholder="例如：wanderlust" onkeydown="if(event.key==='Enter')addWord()">
       <button class="word-add" onclick="addWord()">加入我的词库</button>
-      <div class="word-note">分类、音标、词性、释义和例句均由 AI 自动生成，通常几秒内完成。</div>
+      <div class="word-note">分类、音标、词性、释义和例句由 AI 自动生成，通常几秒内完成。</div>
     </div>
+    <button class="import-toggle" onclick="toggleImport()">${showImport?"收起导入":"导入词条 →"}</button>
+    ${showImport?`
+    <div class="import-box">
+      <div class="field-label" style="margin-bottom:8px;">粘贴我发给你的JSON内容，然后点导入</div>
+      <textarea id="importArea" placeholder='[{"word":"wanderlust","phonetic":"/ˈwɒn.də.lʌst/","pos":"n.","meaning":"旅行癖，对旅行的渴望","category":"旅行","examples":[{"en":"...","cn":"..."}]}]'></textarea>
+      <button class="import-btn" onclick="importWords()">导入</button>
+      <div id="importMsg" class="import-msg"></div>
+    </div>`:""}
     <div class="section-mini">MY VOCABULARY · ${entries.length}</div>
     <div class="word-list">${entries.length?entries.map(([id,v])=>{
       const failed = v.phonetic==="生成失败" || v.phonetic==="待 AI 补充" || v.phonetic==="未知";
@@ -561,8 +618,8 @@ function renderWords(){
       <div class="word-meaning">${htmlmod.escape(v.meaning)}</div>
       <ol class="word-examples">${examples.length
         ? examples.map(e=>`<li>${htmlmod.escape(e.en||"")}${e.cn?` — ${htmlmod.escape(e.cn)}`:""}</li>`).join("")
-        : `<li>${loading?"生成中…":"暂无例句"}</li>`}</ol>
-      ${failed?`<button class="word-add" style="margin-top:10px" onclick="completeWord('${id}')">重新生成</button>`:""}
+        : `<li>${loading?"生成中…":"暂无例句，可用上方导入功能补充"}</li>`}</ol>
+      ${failed?`<button class="word-add" style="margin-top:10px" onclick="completeWord('${id}')">重新生成（仅Claude对话内有效）</button>`:""}
       </div>`;
     }).join("")
       :'<div class="word-empty">还没有单词。输入第一个词开始建立你的个人词库。</div>'}</div>`;
