@@ -421,7 +421,7 @@ async function completeWord(id){
     };
   }catch(e){
     console.error("word detail fetch failed", e);
-    myWords[id] = { ...entry, phonetic:"生成失败", pos:"生成失败", meaning:"词典未收录，或网络问题；可点击重试，或用导入功能手动补充", loading:false };
+    myWords[id] = { ...entry, phonetic:"生成失败", pos:"生成失败", meaning:"词典未收录该词（多为短语/俚语），或网络不稳定，可点击重试", loading:false };
   }
   saveWords();
   render();
@@ -624,14 +624,6 @@ function renderWords(){
       <button class="word-add" onclick="addWord()">加入我的词库</button>
       <div class="word-note">数据来自公开英语词典，中文释义为机器翻译，仅供参考。</div>
     </div>
-    <button class="import-toggle" onclick="toggleImport()">${showImport?"收起导入":"手动导入词条 →"}</button>
-    ${showImport?`
-    <div class="import-box">
-      <div class="field-label" style="margin-bottom:8px;">粘贴我发给你的JSON内容，然后点导入（用于词典查不到的词组/短语）</div>
-      <textarea id="importArea" placeholder='[{"word":"wanderlust","phonetic":"/ˈwɒn.də.lʌst/","pos":"n.","meaning":"旅行癖，对旅行的渴望","category":"旅行","examples":[{"en":"...","cn":"..."}]}]'></textarea>
-      <button class="import-btn" onclick="importWords()">导入</button>
-      <div id="importMsg" class="import-msg"></div>
-    </div>`:""}
     <div class="section-mini">MY VOCABULARY · ${entries.length}</div>
     <div class="word-list">${entries.length?entries.map(([id,v])=>{
       const failed = v.phonetic==="生成失败" || v.phonetic==="待 AI 补充" || v.phonetic==="未知";
